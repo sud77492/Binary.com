@@ -187,31 +187,40 @@ class _HomeState extends State<Home> {
 
 
   void _fetchData() async {
+      
       setState(() {
         _saving = true;
       });
-      final response = await http.get("https://mock-rest-api-server.herokuapp.com/api/v1/user?page=2&row=40",headers: {
-              'Accept': 'application/json'});
-      
-      if (response.statusCode == 200) {
-        Map<String, dynamic> apiResponse = json.decode(utf8.decode(response.bodyBytes));
-        setState(() {
-          _saving = false;
-          _users = (apiResponse['data'] as List)
-          .map((data) => new User.fromJson (data))
-          .toList();
-          _search_users = (apiResponse['data'] as List)
-          .map((data) => new User.fromJson (data))
-          .toList();
-        });
+       try{
+          final response = await http.get(Uri.parse('https://mock-rest-api-server.herokuapp.com/api/v1/user?page=2&row=40'));
+          print(json.decode(utf8.decode(response.bodyBytes)));
+          if (response.statusCode == 200) {
+            
+            Map<String, dynamic> apiResponse = json.decode(utf8.decode(response.bodyBytes));
+            setState(() {
+              _saving = false;
+              _users = (apiResponse['data'] as List)
+              .map((data) => new User.fromJson (data))
+              .toList();
+              _search_users = (apiResponse['data'] as List)
+              .map((data) => new User.fromJson (data))
+              .toList();
+            });
         
         //print(apiResponse['questions'][0]['options'][0]['option_english']);
         // setState(() {
           
         // });
       } else {
+        print("Fares");
         throw Exception('Failed to load photos');
       }
+       }catch(e){
+         print(e);
+       }
+      
+     
+     
       
 
       //Simulate a service call
@@ -221,7 +230,7 @@ class _HomeState extends State<Home> {
 
   Future<bool> deleteUser(String url) async {
     print(url);
-    final response = await http.delete(url, headers: {"Content-Type": "application/json"});
+    final response = await http.delete(Uri.parse(url), headers: {"Content-Type": "application/json"});
     Map<String, dynamic> apiResponse = json.decode(utf8.decode(response.bodyBytes));
         print(apiResponse.toString());
     if (response.statusCode == 200) {

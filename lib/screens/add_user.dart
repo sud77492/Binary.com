@@ -244,7 +244,7 @@ class _AddUserState extends State<AddUser> {
     setState(() {
       _saving = true;
     });
-    final response = await http.post(url, headers: {"Content-Type": "application/json"}, body: json.encode(jsonMap));
+    final response = await http.post(Uri.parse(url), headers: {"Content-Type": "application/json"}, body: json.encode(jsonMap));
   
     if (response.statusCode == 200) {
       Map<String, dynamic> apiResponse = json.decode(utf8.decode(response.bodyBytes));

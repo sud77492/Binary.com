@@ -252,7 +252,7 @@ class _EditUserState extends State<EditUser> {
     //encode Map to JSON
     print(url);
     print(json.encode(jsonMap));
-    final response = await http.put(url, headers: {"Content-Type": "application/json"}, body: json.encode(jsonMap));
+    final response = await http.put(Uri.parse(url), headers: {"Content-Type": "application/json"}, body: json.encode(jsonMap));
     Map<String, dynamic> apiResponse = json.decode(utf8.decode(response.bodyBytes));
     print(apiResponse.toString());
     if (response.statusCode == 200) {
